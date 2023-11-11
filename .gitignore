@@ -1,0 +1,36 @@
+# Ignore compiled Python files
+__pycache__/
+
+# Ignore the virtual environment
+/backend/venve/
+
+# Ignore log files
+*.log
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+# dependencies
+/ui/node_modules
+/ui/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+/ui/.DS_Store
+/ui/.env.local
+/ui/.env.development.local
+/ui/.env.test.local
+/ui/.env.production.local
+/
+/ui/npm-debug.log*
+/ui/yarn-debug.log*
+/ui/yarn-error.log*
+
+.DS_Store
