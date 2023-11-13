@@ -5,13 +5,53 @@ from flask_sqlalchemy import SQLAlchemy
 from migrations import read_csv_and_populate_db
 from sqlalchemy.exc import SQLAlchemyError
 import config
-from models import Movements, Population
+from models import Movements, Population, User
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = config.app
 db = config.db
 
 CORS(app)
+
+jwt = JWTManager(app)
+
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.json.get('username', None)
+    password = request.json.get('password', None)
+    user = User.query.filter_by(username=username).first()    
+    if user and user.check_password(password):
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token), 200
+    else:
+        return jsonify({'message': 'Invalid password'}), 401
+
+    
+@app.route('/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
+
+@app.route('/signUp', methods=['POST'])
+def createUser():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    if not username or not password:
+        return jsonify({'message': 'Username and password are required'}), 400
+    # Check if the username already exists
+    if User.query.filter_by(username=username).first():
+        return jsonify({'message': 'Username already exists'}), 400
+    new_user = User(username=username, password=password)
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message': 'User created successfully'}), 201
+
+
 
 
 
