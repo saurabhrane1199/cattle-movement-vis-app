@@ -5,6 +5,7 @@ import './App.css';
 import { AuthProvider } from './AuthContext';
 import Dashboard from './pages/Dashboard';
 import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Dashboard />}/>
           <Route path='/login' element={<LoginPage />}/>
+          <Route path='/signup' element={<SignUpPage />}/>
         </Routes>
     </Router>
     </AuthProvider>
