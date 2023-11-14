@@ -75,6 +75,7 @@ def create_movement():
 
 # Get all movements
 @app.route('/movements', methods=['GET'])
+@jwt_required()
 def get_all_movements():
     movements = Movements.query.all()
     movement_list = [{
@@ -105,6 +106,7 @@ def get_all_movements():
 
 # Get a single movement
 @app.route('/movements/<int:movement_id>', methods=['GET'])
+@jwt_required()
 def get_movement(movement_id):
     movement = Movements.query.get_or_404(movement_id)
     movement_data = {

@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import { GridApi, ColumnApi } from 'ag-grid-community'; // Grid and Column API types
+import { useAuth } from '../AuthContext';
+import { useNavigate } from 'react-router-dom';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-material.css'; // Optional theme CSS
 
@@ -13,6 +15,10 @@ interface DataTableProps {
 const DataTable: React.FC<DataTableProps> = (props) => {
   const gridRef = useRef<AgGridReact>(null); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState<any[]>(); // Set rowData to Array of Objects, one Object per Row
+  const { user, getToken } = useAuth();
+  const navigate = useNavigate();
+  
+
 
   // Each Column Definition results in one Column.
   const columnDefs = useMemo(
@@ -62,10 +68,21 @@ const DataTable: React.FC<DataTableProps> = (props) => {
 
   // Example load data from server
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/${props.tableType}`)
+
+    const token = getToken();
+    if (!token) {
+          navigate('/login')
+    }
+
+    fetch(`http://127.0.0.1:5000/${props.tableType}`,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json', // Adjust headers as needed
+      },
+    })
       .then((result) => result.json())
       .then((rowData) => setRowData(rowData[props.tableType]));
-  }, [props.tableType]);
+  }, [props.tableType, navigate]);
 
   // Example using Grid's API
   const buttonListener = useCallback(() => {
