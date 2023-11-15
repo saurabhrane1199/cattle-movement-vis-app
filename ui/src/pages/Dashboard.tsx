@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './dashboard.scss';
-import DataTable from '../components/dataTable';
+import DataTable from '../components/DataTable/dataTable';
 import { useAuth } from '../AuthContext';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';

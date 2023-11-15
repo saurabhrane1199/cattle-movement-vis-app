@@ -1,10 +1,15 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import { GridApi, ColumnApi } from 'ag-grid-community'; // Grid and Column API types
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../../AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Map from '../Map/Map';
+import MovementForm from '../CreateMovement/CreateMovement';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-material.css'; // Optional theme CSS
+import './dataTable.scss'
 
 
 interface DataTableProps {
@@ -17,6 +22,17 @@ const DataTable: React.FC<DataTableProps> = (props) => {
   const [rowData, setRowData] = useState<any[]>(); // Set rowData to Array of Objects, one Object per Row
   const { user, getToken } = useAuth();
   const navigate = useNavigate();
+
+  const [showVisualise, setShowVisualise] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+
+  const handleVisualiseClose = () => setShowVisualise(false);
+  const handleVisualiseShow = () => setShowVisualise(true);
+
+  const handleFormClose = () => setShowForm(false);
+  const handleFormShow = () => setShowForm(true);
+
+  
   
 
 
@@ -93,6 +109,39 @@ const DataTable: React.FC<DataTableProps> = (props) => {
   }, []);
 
   return (
+    <div className='wrapper'>
+      <div className='visualise-wrapper'>
+      <Button variant="primary" onClick={handleVisualiseShow}>
+        Visualise
+      </Button>
+      <Modal show={showVisualise} onHide={handleVisualiseClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Movements</Modal.Title>
+        </Modal.Header>
+        <Modal.Body><Map rowData={rowData}/></Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleVisualiseClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      </div>
+      <div className='visualise-wrapper'>
+      <Button variant="primary" onClick={handleFormShow}>
+        Create Movement
+      </Button>
+      <Modal show={showForm} onHide={handleFormClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Movements</Modal.Title>
+        </Modal.Header>
+        <Modal.Body><MovementForm/></Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleFormClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      </div>
     <div className="ag-theme-material" style={{ width: '100%', height: 500 }}>
         <AgGridReact
           className='table'
@@ -105,6 +154,7 @@ const DataTable: React.FC<DataTableProps> = (props) => {
           onCellClicked={cellClickedListener} // Optional - registering for Grid Event
         />
       </div>
+    </div>
   );
 };
 
