@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Login from '../components/Login/Login';
 import { useAuth } from '../AuthContext';
-import SignUp from '../components/SignUp/SignUp';
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import Stack from 'react-bootstrap/Stack';
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import { GridApi, ColumnApi } from 'ag-grid-community'; // Grid and Column API types
 import { useAuth } from '../../AuthContext';
@@ -7,10 +8,18 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Map from '../Map/Map';
 import MovementForm from '../CreateMovement/CreateMovement';
+import PopulationForm from '../CreatePopulation/PopulationForm';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-material.css'; // Optional theme CSS
 import './dataTable.scss'
 
+function titleCase(str :any) {
+  str = str.toLowerCase().split(' ');
+  for (var i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1); 
+  }
+  return str.join(' ');
+}
 
 interface DataTableProps {
     tableType: string;
@@ -20,7 +29,7 @@ interface DataTableProps {
 const DataTable: React.FC<DataTableProps> = (props) => {
   const gridRef = useRef<AgGridReact>(null); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState<any[]>(); // Set rowData to Array of Objects, one Object per Row
-  const { user, getToken } = useAuth();
+  const { user, logout, getToken } = useAuth();
   const navigate = useNavigate();
 
   const [showVisualise, setShowVisualise] = useState(false);
@@ -66,6 +75,8 @@ const DataTable: React.FC<DataTableProps> = (props) => {
         { headerName: 'ID', field: 'Id', filter: true },
         { headerName: 'Premise Id', field: 'premiseid', filter: true },
         { headerName: 'Total Animal', field: 'total_animal', filter: true },
+        { headerName: 'Latitude', field: 'lat', filter: true },
+        { headerName: 'Longitude', field: 'long', filter: true },
 
         // Add more columns based on your Movement model fields
       ],
@@ -97,7 +108,21 @@ const DataTable: React.FC<DataTableProps> = (props) => {
       },
     })
       .then((result) => result.json())
-      .then((rowData) => setRowData(rowData[props.tableType]));
+      .then((rowData) => {
+        console.log(rowData[props.tableType])
+        setRowData(rowData[props.tableType])
+      })
+      .catch((err)=>{
+        if (err.response && err.response.status === 401) {
+          // Handle Unauthorized error here (e.g., redirect to login page)
+          console.log('Unauthorized access. Redirecting to login page...');
+          logout()
+          navigate('/login')
+        } else {
+          console.error('Error:', err.message);
+          // Handle other types of errors if needed
+        }
+      });
   }, [props.tableType, navigate]);
 
   // Example using Grid's API
@@ -110,15 +135,16 @@ const DataTable: React.FC<DataTableProps> = (props) => {
 
   return (
     <div className='wrapper'>
+      <Stack direction="horizontal" gap={3}>
       <div className='visualise-wrapper'>
       <Button variant="primary" onClick={handleVisualiseShow}>
         Visualise
       </Button>
       <Modal show={showVisualise} onHide={handleVisualiseClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Movements</Modal.Title>
+          <Modal.Title>{titleCase(props.tableType)}</Modal.Title>
         </Modal.Header>
-        <Modal.Body><Map rowData={rowData}/></Modal.Body>
+        <Modal.Body><Map rowData={rowData} dataType={props.tableType}/></Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleVisualiseClose}>
             Close
@@ -128,13 +154,13 @@ const DataTable: React.FC<DataTableProps> = (props) => {
       </div>
       <div className='visualise-wrapper'>
       <Button variant="primary" onClick={handleFormShow}>
-        Create Movement
+        Create {titleCase(props.tableType)}
       </Button>
       <Modal show={showForm} onHide={handleFormClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Movements</Modal.Title>
+          <Modal.Title>{titleCase(props.tableType)}</Modal.Title>
         </Modal.Header>
-        <Modal.Body><MovementForm/></Modal.Body>
+        <Modal.Body>{props.tableType==="movements" ? <MovementForm/>:<PopulationForm/>}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleFormClose}>
             Close
@@ -142,6 +168,7 @@ const DataTable: React.FC<DataTableProps> = (props) => {
         </Modal.Footer>
       </Modal>
       </div>
+      </Stack>
     <div className="ag-theme-material" style={{ width: '100%', height: 500 }}>
         <AgGridReact
           className='table'

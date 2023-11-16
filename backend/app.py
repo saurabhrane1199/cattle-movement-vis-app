@@ -8,6 +8,7 @@ import config
 from models import Movements, Population, User
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+import datetime
 
 app = config.app
 db = config.db
@@ -65,6 +66,7 @@ def home():
 def create_movement():
     try:
         data = request.json
+        data["new_shipmentsstartdate"] = datetime.datetime.strptime(data["new_shipmentsstartdate"], "%y-%m-%d").date()
         new_movement = Movements(**data)
         db.session.add(new_movement)
         db.session.commit()
@@ -162,13 +164,22 @@ def delete_movement(movement_id):
         return jsonify({"error": str(e)}), 500
     
 @app.route('/population', methods=['GET'])
+@jwt_required()
 def get_all_population():
-    populations = Population.query.all()
-    population_list = [
-        {"Id": population.Id, "premiseid": population.premiseid, "total_animal": population.total_animal}
-        for population in populations
-    ]
-    return jsonify({"population": population_list})
+    #populations = Population.query.all()
+    population_data = db.session.query(Population, Movements).join(Movements, Population.premiseid == Movements.new_originpremid).all()
+    result = []
+    for pop, move in population_data:
+        result.append({
+            "Id": pop.Id,
+            'premiseid': pop.premiseid,
+            'total_animal': pop.total_animal,
+            'lat': move.origin_Lat,
+            'long': move.origin_Lon
+        })
+
+    # Return the data as JSON to the client
+    return jsonify({"population": result})
 
 # Endpoint to get a specific population record by Id
 @app.route('/population/<int:population_id>', methods=['GET'])
@@ -184,6 +195,6 @@ def get_population_by_id(population_id):
 
 if __name__ == '__main__':
     app.debug=True
-    app.run(host='127.0.0.1', port=5000)
+    app.run(host='127.0.0.1', port=7000)
     with app.app_context():
         read_csv_and_populate_db()

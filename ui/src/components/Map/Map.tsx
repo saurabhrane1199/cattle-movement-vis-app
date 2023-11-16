@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 
 interface MapProps {
   rowData : any[] | undefined
+  dataType : string
 }
 
 
@@ -16,6 +17,9 @@ interface MapRouteProps {
   endCoords: [number, number];
 }
 
+interface MapMarkerProps {
+  startCoords: [number, number];
+}
 
 const MapRoute: React.FC<MapRouteProps> = ({ startCoords, endCoords }) => {
       return(
@@ -27,28 +31,31 @@ const MapRoute: React.FC<MapRouteProps> = ({ startCoords, endCoords }) => {
       </div>)
 };
 
+const MapMarker: React.FC<MapMarkerProps> = ({ startCoords }) => {
+  return(
+  <div>
+    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+    <Marker position={startCoords} icon={new Icon({iconUrl: markerIconPng, iconSize: [25, 41]})}/>
+  </div>)
+};
 
-const Map: React.FC<MapProps> = ({ rowData }) => {
 
-  // const [routeData, setRouteData] = useState<any[]>();
-
-  // useEffect(() => {
-
-  //   fetch(`http://127.0.0.1:5000/movements`)
-  //     .then((result) => result.json())
-  //     .then((rowData) => {
-  //       setRouteData(rowData['movements'])
-  //     });
-  // }, []);
+const Map: React.FC<MapProps> = ({ rowData, dataType }) => {
 
   return (
     <MapContainer
-      center={rowData ? [rowData[0]["origin_Lat"], rowData[0]["origin_Lon"]] : [0,0]}
+      center={rowData ? 
+        dataType==="movements" ? [rowData[0]["origin_Lat"], rowData[0]["origin_Lon"]] :
+        [rowData[0]["lat"], rowData[0]["long"]]
+        : 
+        [0,0]}
       zoom={4}
       style={{ height: '500px', width: '100%' }}
     >
       {rowData ? (rowData.map((data) => (
-          <MapRoute startCoords={[data["origin_Lat"], data["origin_Lon"]]} endCoords={[data["destination_Lat"], data["destination_Long"]]}/>
+          dataType==='movements' ? 
+          <MapRoute startCoords={[data["origin_Lat"], data["origin_Lon"]]} endCoords={[data["destination_Lat"], data["destination_Long"]]}/>:
+          <MapMarker startCoords={[data["lat"], data["long"]]}/>
         ))): ''}
     
     </MapContainer>
