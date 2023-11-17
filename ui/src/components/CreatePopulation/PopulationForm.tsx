@@ -12,7 +12,29 @@ const PopulationForm = () => {
 
   const onSubmit = (data: any) => {
     // Handle form submission, send data to the backend, etc.
-    console.log(data);
+    // Handle form submission, send data to the backend, etc.
+    fetch('http://127.0.0.1:5000/population', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any other headers if needed
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json(); // Assuming the response is in JSON format
+      })
+      .then(data => {
+        console.log('Data sent successfully:', data);
+        // Handle any success actions here
+      })
+      .catch(error => {
+        console.error('Failed to send data. Error:', error);
+        // Handle any error actions here
+      });
   };
 
   return (

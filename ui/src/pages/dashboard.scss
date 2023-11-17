@@ -59,9 +59,9 @@
   }
   
   .note {
-    width: calc(100% - 6rem);
+    width: calc(100% - 10rem);
+    align-items: center;
     margin: 2rem;
-    background: #171c26;
     border-radius: 10px;
     padding: 1rem;
     h3 {
@@ -71,6 +71,16 @@
     p {
       color: #717783;
     }
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    .logout-button{
+      background-color: #EBECEE;
+      border-color: #EBECEE;
+      color: #4676cd;
+      font-weight: bold;
+    }
+    
   }
   
   .name {
@@ -107,6 +117,7 @@
     position: relative;
     > header {
       padding: 3rem 3rem 0 3rem;
+      color:#0b121b
     }
   }
   
@@ -134,6 +145,7 @@
       font-size: 1.15rem;
       color: #8c939e;
       position: relative;
+      text-decoration: none;
       &.active {
         color: #101620;
         font-weight: 600;

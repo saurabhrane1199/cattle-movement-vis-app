@@ -9,9 +9,11 @@ from models import Movements, Population, User
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import datetime
+import logging
 
 app = config.app
 db = config.db
+app.logger.setLevel(logging.DEBUG)
 
 CORS(app)
 
@@ -30,13 +32,6 @@ def login():
     else:
         return jsonify({'message': 'Invalid password'}), 401
 
-    
-@app.route('/protected', methods=['GET'])
-@jwt_required()
-def protected():
-    current_user = get_jwt_identity()
-    return jsonify(logged_in_as=current_user), 200
-
 @app.route('/signUp', methods=['POST'])
 def createUser():
     data = request.get_json()
@@ -51,9 +46,6 @@ def createUser():
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'User created successfully'}), 201
-
-
-
 
 
 @app.route('/', methods=['GET'])
@@ -74,6 +66,8 @@ def create_movement():
     except SQLAlchemyError as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        app.logger.error(e)
 
 # Get all movements
 @app.route('/movements', methods=['GET'])
@@ -192,9 +186,22 @@ def get_population_by_id(population_id):
     }
     return jsonify(population_data)
 
+@app.route('/population', methods=['POST'])
+def create_population():
+    try:
+        data = request.json
+        new_population = Population(**data)
+        db.session.add(new_population)
+        db.session.commit()
+        return jsonify({"message": "Population created successfully"})
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        app.logger.error(e)
 
 if __name__ == '__main__':
     app.debug=True
-    app.run(host='127.0.0.1', port=7000)
+    app.run(host='127.0.0.1', port=5000)
     with app.app_context():
         read_csv_and_populate_db()

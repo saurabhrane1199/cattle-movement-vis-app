@@ -1,5 +1,8 @@
 .wrapper{
     width: 100%;
+    .btn .btn-primary{
+        background-color: #0b121b;
+    }
 }
 
 .visualise-wrapper{
@@ -7,6 +10,21 @@
     color: black;
 }
 
+.custom-button{
+    background-color: #0b121b !important;
+    border-color: #0b121b !important;
+}
+
 .modal-body{
-    color:black
+    color: #0b121b;
+}
+
+.modal-header{
+    color:  #0b121b;
+    .modal-title{
+        text-align: center;
+        font-weight: bolder;
+
+    }
+    
 }

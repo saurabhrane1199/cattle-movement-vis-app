@@ -32,10 +32,12 @@ body {
   }
   header {
     background-color: #202731;
-    color: #C5C6C8;
+    color: white;
+    font-weight: bolder;
     display: block;
     padding: 1.5em;
     text-align: center;
+    font-stretch: semi-expanded;
   }
   .input-wrapper {
     position: relative;
@@ -74,6 +76,14 @@ body {
     &:nth-child(2):before {
       content: "\f023";
       font-size: 18px;
+    }
+  }
+  .register{
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    :hover{
+      cursor: pointer;
     }
   }
   button {

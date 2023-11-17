@@ -114,7 +114,6 @@ const DataTable: React.FC<DataTableProps> = (props) => {
       })
       .catch((err)=>{
         if (err.response && err.response.status === 401) {
-          // Handle Unauthorized error here (e.g., redirect to login page)
           console.log('Unauthorized access. Redirecting to login page...');
           logout()
           navigate('/login')
@@ -137,7 +136,7 @@ const DataTable: React.FC<DataTableProps> = (props) => {
     <div className='wrapper'>
       <Stack direction="horizontal" gap={3}>
       <div className='visualise-wrapper'>
-      <Button variant="primary" onClick={handleVisualiseShow}>
+      <Button variant="primary" className="custom-button" onClick={handleVisualiseShow}>
         Visualise
       </Button>
       <Modal show={showVisualise} onHide={handleVisualiseClose}>
@@ -153,7 +152,7 @@ const DataTable: React.FC<DataTableProps> = (props) => {
       </Modal>
       </div>
       <div className='visualise-wrapper'>
-      <Button variant="primary" onClick={handleFormShow}>
+      <Button variant="primary" className="custom-button" onClick={handleFormShow}>
         Create {titleCase(props.tableType)}
       </Button>
       <Modal show={showForm} onHide={handleFormClose}>

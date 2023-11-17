@@ -38,7 +38,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="password" />
       </div>
       <button id="continue" type="submit" onClick={handleLogin}>Submit</button>
-      <span><a onClick={reDirectToSignUp}>Register</a></span>
+      <span className='register'><a onClick={reDirectToSignUp}>Register</a></span>
     </fieldset>
   </div>
   );
