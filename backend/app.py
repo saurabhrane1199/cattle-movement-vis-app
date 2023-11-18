@@ -15,7 +15,7 @@ app = config.app
 db = config.db
 app.logger.setLevel(logging.DEBUG)
 
-CORS(app)
+CORS(app, resources={r"*": {"origins": "http://localhost:3000"}})
 
 jwt = JWTManager(app)
 
@@ -214,6 +214,6 @@ def create_population():
 
 if __name__ == '__main__':
     app.debug=True
-    app.run(host='0.0.0.0', port=3001)
     with app.app_context():
         read_csv_and_populate_db()
+    app.run(host='0.0.0.0', port=3001)

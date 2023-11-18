@@ -3,7 +3,7 @@ import datetime
 import config
 
 # Import your SQLAlchemy models
-from models import Movements, Population
+from models import Movements, Population, User
 
 db = config.db
 
