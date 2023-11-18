@@ -1,7 +1,7 @@
 import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import config from '../../config';
-
+import './PopulationForm.scss'
 const PopulationForm = () => {
   const { register, handleSubmit } = useForm();
 
@@ -46,7 +46,7 @@ const PopulationForm = () => {
         </Form.Group>
       ))}
 
-      <Button variant="primary" type="submit">
+      <Button variant="primary" type="submit" className="custom-button">
         Submit
       </Button>
     </Form>

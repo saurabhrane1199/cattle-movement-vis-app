@@ -1,6 +1,7 @@
 import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import config from '../../config';
+import './CreateMovement.scss'
 
 const MovementForm = () => {
   const { register, handleSubmit } = useForm();
@@ -64,7 +65,7 @@ const MovementForm = () => {
         </Form.Group>
       ))}
 
-      <Button variant="primary" type="submit">
+      <Button variant="primary" type="submit" className="custom-button">
         Submit
       </Button>
     </Form>

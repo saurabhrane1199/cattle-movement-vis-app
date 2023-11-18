@@ -9,6 +9,8 @@ import Modal from 'react-bootstrap/Modal';
 import Map from '../Map/Map';
 import MovementForm from '../CreateMovement/CreateMovement';
 import PopulationForm from '../CreatePopulation/PopulationForm';
+import greenLocationPin from "../../assets/greenLocationPin.png"
+import redLocationPin from "../../assets/redLocationPin.png"
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-material.css'; // Optional theme CSS
 import './dataTable.scss'
@@ -25,6 +27,8 @@ function titleCase(str :any) {
 interface DataTableProps {
     tableType: string;
   }
+
+  
 
 
 const DataTable: React.FC<DataTableProps> = (props) => {
@@ -63,10 +67,6 @@ const DataTable: React.FC<DataTableProps> = (props) => {
       { headerName: 'Destination Name', field: 'new_destinationname', filter: true },
       { headerName: 'Destination Postal Code', field: 'new_destinationpostalcode', filter: true },
       { headerName: 'Destination State', field: 'new_destinationstate', filter: true },
-      { headerName: 'Origin Latitude', field: 'origin_Lat', filter: true },
-      { headerName: 'Origin Longitude', field: 'origin_Lon', filter: true },
-      { headerName: 'Destination Latitude', field: 'destination_Lat', filter: true },
-      { headerName: 'Destination Longitude', field: 'destination_Long', filter: true },
       { headerName: 'Shipment Start Date', field: 'new_shipmentsstartdate', filter: true },
       { headerName: 'Origin Prem ID', field: 'new_originpremid', filter: true },
       { headerName: 'Destination Prem ID', field: 'new_destinationpremid', filter: true },
@@ -84,6 +84,7 @@ const DataTable: React.FC<DataTableProps> = (props) => {
     [props.tableType]
   );
 
+  
   // DefaultColDef sets props common to all Columns
   const defaultColDef = useMemo(() => ({
     sortable: true,
@@ -146,9 +147,22 @@ const DataTable: React.FC<DataTableProps> = (props) => {
         </Modal.Header>
         <Modal.Body><Map rowData={rowData} dataType={props.tableType}/></Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleVisualiseClose}>
-            Close
-          </Button>
+          <div>
+          <img
+            src={greenLocationPin}
+            alt="Start Marker"
+            style={{ width: '20px', height: '20px' }} // Adjust width and height as needed
+          />
+          <span>Route Origin</span>
+        </div>
+        <div>
+          <img
+            src={redLocationPin}
+            alt="End Marker"
+            style={{ marginRight: '5px', width: '20px', height: '20px' }} // Adjust width and height as needed
+          />
+          <span>Route Destination</span>
+        </div>
         </Modal.Footer>
       </Modal>
       </div>
