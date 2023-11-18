@@ -161,7 +161,19 @@ def delete_movement(movement_id):
 @jwt_required()
 def get_all_population():
     #populations = Population.query.all()
-    population_data = db.session.query(Population, Movements).join(Movements, Population.premiseid == Movements.new_originpremid).all()
+    population_data = db.session.query(Population, Movements).join(Movements, (Movements.new_originpremid == Population.premiseid) | (Movements.new_destinationpremid == Population.premiseid)).distinct().all()
+#     result = db.session.query(
+#     Population.Id.label('population_id'),
+#     Population.premiseid,
+#     Movements.Id.label('movement_id'),
+#     Movements.origin_Lat,
+#     Movements.origin_Lon,
+#     Movements.destination_Lat,
+#     Movements.destination_Long
+# ).outerjoin(
+#     Movements,
+#     (Movements.new_originpremid == Population.premiseid) | (Movements.new_destinationpremid == Population.premiseid)
+# ).distinct().all()
     result = []
     for pop, move in population_data:
         result.append({
@@ -202,6 +214,6 @@ def create_population():
 
 if __name__ == '__main__':
     app.debug=True
-    app.run(port=3001)
+    app.run(host='0.0.0.0', port=3001)
     with app.app_context():
         read_csv_and_populate_db()

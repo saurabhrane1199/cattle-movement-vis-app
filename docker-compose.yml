@@ -5,8 +5,6 @@ services:
       context: ./backend
     ports:
       - "3001:3001"
-    networks:
-      - backend-network
 
   frontend:
     build:
@@ -15,8 +13,6 @@ services:
       - "3000:3000"
     depends_on:
       - backend
-    networks:
-      - backend-network
 
 networks:
   backend-network:
