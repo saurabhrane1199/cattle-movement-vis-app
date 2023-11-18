@@ -6,7 +6,6 @@ import greenLocationPin from "../../assets/greenLocationPin.png"
 import redLocationPin from "../../assets/redLocationPin.png"
 import {Icon} from 'leaflet'
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useState } from 'react';
 
 interface MapProps {
   rowData : any[] | undefined

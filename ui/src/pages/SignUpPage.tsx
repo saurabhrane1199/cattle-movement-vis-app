@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
-import Login from '../components/Login/Login';
-import { useAuth } from '../AuthContext';
+import React from 'react';
 import SignUp from '../components/SignUp/SignUp';
 import { useNavigate } from 'react-router-dom';
+import config from '../config';
 
 const SignUpPage: React.FC = () => {
 
   const navigate = useNavigate();
 
   const handleSignUp = async (username: string, password: string) => {
-    fetch('http://127.0.0.1:5000/signUp', {
+    fetch(`${config.apiUrl}/signUp`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

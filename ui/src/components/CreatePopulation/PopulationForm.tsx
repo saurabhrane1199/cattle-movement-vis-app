@@ -1,6 +1,6 @@
-import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import config from '../../config';
 
 const PopulationForm = () => {
   const { register, handleSubmit } = useForm();
@@ -13,7 +13,7 @@ const PopulationForm = () => {
   const onSubmit = (data: any) => {
     // Handle form submission, send data to the backend, etc.
     // Handle form submission, send data to the backend, etc.
-    fetch('http://127.0.0.1:5000/population', {
+    fetch(`${config.apiUrl}/population`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

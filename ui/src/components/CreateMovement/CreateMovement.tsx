@@ -1,6 +1,6 @@
-import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import config from '../../config';
 
 const MovementForm = () => {
   const { register, handleSubmit } = useForm();
@@ -31,7 +31,7 @@ const MovementForm = () => {
 
   const onSubmit = (data: any) => {
     // Handle form submission, send data to the backend, etc.
-    fetch('http://127.0.0.1:5000/movements', {
+    fetch(`${config.apiUrl}/movements`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

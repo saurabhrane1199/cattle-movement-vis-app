@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Login from '../components/Login/Login';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
+import config from '../config';
 
 const LoginPage: React.FC = () => {
 
@@ -10,7 +11,7 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (username: string, password: string) => {
-    fetch('http://127.0.0.1:5000/login', {
+    fetch(`${config.apiUrl}/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import Stack from 'react-bootstrap/Stack';
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
-import { GridApi, ColumnApi } from 'ag-grid-community'; // Grid and Column API types
+import { GridApi } from 'ag-grid-community'; // Grid and Column API types
 import { useAuth } from '../../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
@@ -12,6 +12,7 @@ import PopulationForm from '../CreatePopulation/PopulationForm';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-material.css'; // Optional theme CSS
 import './dataTable.scss'
+import config from '../../config';
 
 function titleCase(str :any) {
   str = str.toLowerCase().split(' ');
@@ -101,7 +102,7 @@ const DataTable: React.FC<DataTableProps> = (props) => {
           navigate('/login')
     }
 
-    fetch(`http://127.0.0.1:5000/${props.tableType}`,{
+    fetch(`${config.apiUrl}/${props.tableType}`,{
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json', // Adjust headers as needed
