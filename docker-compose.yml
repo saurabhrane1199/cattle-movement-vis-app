@@ -3,12 +3,14 @@ services:
   backend:
     build:
       context: ./backend
+    image: saurabhrane1199/cattle-viz-backend:latest
     ports:
       - "3001:3001"
 
   frontend:
     build:
       context: ./ui
+    image: saurabhrane1199/cattle-viz-frontend:latest
     ports:
       - "3000:3000"
     depends_on:

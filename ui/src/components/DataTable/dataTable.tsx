@@ -176,9 +176,7 @@ const DataTable: React.FC<DataTableProps> = (props) => {
         </Modal.Header>
         <Modal.Body>{props.tableType==="movements" ? <MovementForm/>:<PopulationForm/>}</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleFormClose}>
-            Close
-          </Button>
+          <span><p>New Population data is visible only if there is a related movement specifying Latitude and Longitude</p></span>
         </Modal.Footer>
       </Modal>
       </div>
