@@ -1,5 +1,8 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 const config = {
-    apiUrl: process.env.API_URL || 'http://localhost:3001',
+    apiUrl: process.env.API_URL,
 };
 
 export default config;
